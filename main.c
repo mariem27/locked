@@ -7,37 +7,36 @@
 #include <stdio.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL.h>
-#include "projet.h"
+#include "depla.h"
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_mixer.h>
+int main()
+{  
+   entites ecran,ennemi,srf;
+   Background bg,bg1;
+   SDL_Event event;
+   SDL_Init(SDL_INIT_EVERYTHING);
+	int done=0;
+	int test=0;
+   	int i;
+      
 
-
-int main(){
-	SDL_Init(SDL_INIT_EVERYTHING); 
-	SDL_WM_SetCaption("projet", NULL);
-
-
-	SDL_Surface* ecran ;
-	Map map;
-	entite torch, boussole, caise, sac;
-
-	initialiser_entite(&map ,&torch, &boussole, &caise,&sac);
-
-	ecran= SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE);
-	map.img = IMG_Load("map.png");
-	map.posimg.x = 0;
-        map.posimg.y = 0;
-
-	int done = 0;
-	while(!done){
-		SDL_BlitSurface(map.img, NULL, ecran, &map.posimg);
-		bliter_surface(&ecran, map ,torch, boussole, caise, sac);
-               SDL_Flip(ecran);
-	}
-
-	liberer_surface(map,torch, boussole, caise, sac);
-	SDL_FreeSurface(map.img);
-	
-	SDL_Quit();
-	return 0;
+   initialiser_ennemi(&ennemi,&ecran,&bg,&bg1); 
+   ecran.srf[0]=SDL_SetVideoMode(640, 480, 32, SDL_DOUBLEBUF);
+   charger_images(&ennemi,&bg,&bg1);
+   SDL_EnableKeyRepeat(120, 120);
+   SDL_WM_SetCaption( "..depla depla..", NULL );
+  while(!done)
+{       display(&ennemi,&ecran ,&bg ,&test );
+        deplacer_aleatoire_ennemi(&ennemi,&bg1);
+        collision_back (ennemi,bg1);
+        done= check_input(event,&test,done,&ecran,&ennemi);
+        SDL_Flip(ecran.srf[0]);
+}for(i=1;i<7;i++){
+         SDL_FreeSurface(ennemi.srf[i]);
+   
+         SDL_FreeSurface(bg.srf); 
+}
+   SDL_Quit();
+   return 0;
 }
