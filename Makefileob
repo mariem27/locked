@@ -1,0 +1,6 @@
+prog   : projet.o  main.o
+	gcc projet.o main.o -o prog -lSDL -lSDL_ttf -lSDL_mixer -lSDL_image
+projet.o : projet.c
+	gcc -c  projet.c -g -lSDL -lSDL_ttf -lSDL_mixer -lSDL_image
+main.o : main.c
+	gcc -c main.c -g -lSDL -lSDL_ttf -lSDL_mixer -lSDL_image
